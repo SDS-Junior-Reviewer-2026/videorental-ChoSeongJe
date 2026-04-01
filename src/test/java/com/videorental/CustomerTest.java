@@ -8,16 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CustomerTest {
+    Customer customer = new Customer("NAME_NOT_IMPORTANT");
+
     @Test
     public void returnNewCustomer() {
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         assertThat(customer).isNotNull();
     }
 
     @Test
     public void statementForNoRental() {
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
-
         String statement = customer.statement();
 
         assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
@@ -27,7 +26,6 @@ public class CustomerTest {
 
     @Test
     public void statementForRegularMovieRentalLessThan3Days(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
         int daysRented = 2;
         Rental rental = new Rental(movie,daysRented);
@@ -42,7 +40,6 @@ public class CustomerTest {
 
     @Test
     public void statementForRegularMovieRentalMoreThan2Days(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
         int daysRented = 3;
         Rental rental = new Rental(movie,daysRented);
@@ -57,7 +54,6 @@ public class CustomerTest {
 
     @Test
     public void statementForNewReleaseMovie() {
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
         int daysRented = 1;
         Rental rental = new Rental(movie,daysRented);
@@ -73,7 +69,6 @@ public class CustomerTest {
 
     @Test
     public void statementForChildrenMovieRentalMoreThan3Days(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
         int daysRented = 4;
         Rental rental = new Rental(movie,daysRented);
@@ -88,7 +83,6 @@ public class CustomerTest {
 
     @Test
     public void statementForChildrenMovieRentalLessThan4Days(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
         int daysRented = 3;
         Rental rental = new Rental(movie,daysRented);
@@ -103,7 +97,6 @@ public class CustomerTest {
 
     @Test
     public void statementForNewReleaseMovieRentalMoreThan1Days(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
         int daysRented = 2;
         Rental rental = new Rental(movie,daysRented);
@@ -118,7 +111,6 @@ public class CustomerTest {
 
     @Test
     public void statementForFewMovieRental(){
-        Customer customer = new Customer("NAME_NOT_IMPORTANT");
         Movie regularMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
         Movie newReleaseMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
         Movie childrenMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
