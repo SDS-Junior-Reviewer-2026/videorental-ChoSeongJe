@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CustomerTest {
-    Customer customer = new Customer("NAME_NOT_IMPORTANT");
+    public static final String NAME = "NAME_NOT_IMPORTANT";
+    public static final String TITLE = "TITLE_NOT_IMPORTANT";
+    Customer customer = new Customer(NAME);
 
     @Test
     public void returnNewCustomer() {
@@ -17,22 +19,22 @@ public class CustomerTest {
 
     @Test
     public void statementForNoRental() {
-        String statement = customer.statement();
-
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "Amount owed is 0.0\n" +
                 "You earned 0 frequent renter pointers");
     }
 
+    private static Rental createRentalFor(int daysRented, int priceCode) {
+        Movie movie = new Movie(TITLE, priceCode);
+        Rental rental = new Rental(movie, daysRented);
+        return rental;
+    }
+
     @Test
     public void statementForRegularMovieRentalLessThan3Days(){
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
-        int daysRented = 2;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(2, Movie.REGULAR));
 
-        String statement = customer.statement();
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t2.0(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 2.0\n" +
                 "You earned 1 frequent renter pointers");
@@ -40,13 +42,9 @@ public class CustomerTest {
 
     @Test
     public void statementForRegularMovieRentalMoreThan2Days(){
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
-        int daysRented = 3;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(3, Movie.REGULAR));
 
-        String statement = customer.statement();
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t3.5(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 3.5\n" +
                 "You earned 1 frequent renter pointers");
@@ -54,14 +52,9 @@ public class CustomerTest {
 
     @Test
     public void statementForNewReleaseMovie() {
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
-        int daysRented = 1;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(1, Movie.NEW_RELEASE));
 
-        String statement = customer.statement();
-
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t3.0(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 3.0\n" +
                 "You earned 1 frequent renter pointers");
@@ -69,13 +62,9 @@ public class CustomerTest {
 
     @Test
     public void statementForChildrenMovieRentalMoreThan3Days(){
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
-        int daysRented = 4;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(4, Movie.CHILDRENS));
 
-        String statement = customer.statement();
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t3.0(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 3.0\n" +
                 "You earned 1 frequent renter pointers");
@@ -83,13 +72,9 @@ public class CustomerTest {
 
     @Test
     public void statementForChildrenMovieRentalLessThan4Days(){
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
-        int daysRented = 3;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(3, Movie.CHILDRENS));
 
-        String statement = customer.statement();
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t1.5(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 1.5\n" +
                 "You earned 1 frequent renter pointers");
@@ -97,13 +82,9 @@ public class CustomerTest {
 
     @Test
     public void statementForNewReleaseMovieRentalMoreThan1Days(){
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
-        int daysRented = 2;
-        Rental rental = new Rental(movie,daysRented);
-        customer.addRental(rental);
+        customer.addRental(createRentalFor(2, Movie.NEW_RELEASE));
 
-        String statement = customer.statement();
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t6.0(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 6.0\n" +
                 "You earned 2 frequent renter pointers");
@@ -111,20 +92,28 @@ public class CustomerTest {
 
     @Test
     public void statementForFewMovieRental(){
-        Movie regularMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.REGULAR);
-        Movie newReleaseMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.NEW_RELEASE);
-        Movie childrenMovie = new Movie("TITLE_NOT_IMPORTANT",Movie.CHILDRENS);
-        customer.addRental(new Rental(regularMovie, 1));
-        customer.addRental(new Rental(newReleaseMovie, 4));
-        customer.addRental(new Rental(childrenMovie, 4));
+        customer.addRental(createRentalFor(1, Movie.REGULAR));
+        customer.addRental(createRentalFor(4, Movie.NEW_RELEASE));
+        customer.addRental(createRentalFor(4, Movie.CHILDRENS));
 
-        String statement = customer.statement();
-
-        assertThat(statement).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
                 "\t2.0(TITLE_NOT_IMPORTANT)\n" +
                 "\t12.0(TITLE_NOT_IMPORTANT)\n" +
                 "\t3.0(TITLE_NOT_IMPORTANT)\n" +
                 "Amount owed is 17.0\n" +
                 "You earned 4 frequent renter pointers");
+    }
+
+    @Test
+    public void setPriceCodeOfMovie(){
+        Movie movie = new Movie(TITLE, Movie.NEW_RELEASE);
+        movie.setPriceCode(2);
+        Rental rental = new Rental(movie, 3);
+        customer.addRental(rental);
+
+        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
+                "\t1.5(TITLE_NOT_IMPORTANT)\n" +
+                "Amount owed is 1.5\n" +
+                "You earned 1 frequent renter pointers");
     }
 }
