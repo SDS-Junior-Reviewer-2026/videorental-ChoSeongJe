@@ -24,10 +24,22 @@ public class CustomerTest {
                 "You earned 0 frequent renter pointers");
     }
 
-    private static Rental createRentalFor(int daysRented, int priceCode) {
-        Movie movie = new Movie(TITLE, priceCode);
-        Rental rental = new Rental(movie, daysRented);
-        return rental;
+    private Rental createRentalFor(int daysRented, int priceCode) {
+        Movie movie = getMovie(priceCode);
+        return new Rental(movie, daysRented);
+    }
+
+    private Movie getMovie(int priceCode) {
+        switch (priceCode) {
+            case Movie.REGULAR:
+                return new RegularMovie(TITLE);
+            case Movie.NEW_RELEASE:
+                return new NewReleaseMovie(TITLE);
+            case Movie.CHILDRENS:
+                return new ChildrenMovie(TITLE);
+            default:
+                throw new IllegalArgumentException("Invalid price code");
+        }
     }
 
     @Test
@@ -106,14 +118,14 @@ public class CustomerTest {
 
     @Test
     public void setPriceCodeOfMovie(){
-        Movie movie = new Movie(TITLE, Movie.NEW_RELEASE);
-        movie.setPriceCode(2);
+        Movie movie = getMovie(Movie.NEW_RELEASE);
+        movie.setPriceCode(1);
         Rental rental = new Rental(movie, 3);
         customer.addRental(rental);
 
         assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
-                "\t1.5(TITLE_NOT_IMPORTANT)\n" +
-                "Amount owed is 1.5\n" +
-                "You earned 1 frequent renter pointers");
+                "\t9.0(TITLE_NOT_IMPORTANT)\n" +
+                "Amount owed is 9.0\n" +
+                "You earned 2 frequent renter pointers");
     }
 }
