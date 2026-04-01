@@ -13,10 +13,6 @@ public abstract class Movie {
 		this.priceCode = priceCode;
 	}
 
-	public void setPriceCode(int arg) {
-		priceCode = arg;
-	}
-
 	public String getTitle() {
 		return title;
 	}

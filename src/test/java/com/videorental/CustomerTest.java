@@ -116,16 +116,4 @@ public class CustomerTest {
                 "You earned 4 frequent renter pointers");
     }
 
-    @Test
-    public void setPriceCodeOfMovie(){
-        Movie movie = getMovie(Movie.NEW_RELEASE);
-        movie.setPriceCode(1);
-        Rental rental = new Rental(movie, 3);
-        customer.addRental(rental);
-
-        assertThat(customer.statement()).isEqualTo("Rental Record for NAME_NOT_IMPORTANT\n" +
-                "\t9.0(TITLE_NOT_IMPORTANT)\n" +
-                "Amount owed is 9.0\n" +
-                "You earned 2 frequent renter pointers");
-    }
 }
